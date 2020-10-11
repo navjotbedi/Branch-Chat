@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Branch Chat</string>
+
+    <!-- Menu Items -->
+    <string name="menu_logout">Logout</string>
+    <string name="menu_view_code">View Code</string>
+    <string name="menu_about_developer">About Developer</string>
+</resources>
