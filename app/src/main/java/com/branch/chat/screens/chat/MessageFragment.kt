@@ -1,11 +1,13 @@
 package com.branch.chat.screens.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.branch.chat.R
 import com.branch.chat.adapters.MessageAdapter
@@ -31,21 +33,24 @@ class MessageFragment : Fragment(R.layout.fragment_message) {
     lateinit var messageRepository: MessageRepository
     @Inject
     lateinit var utils: Utils
+    private lateinit var adapter: MessageAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = MessageAdapter()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-        val adapter = MessageAdapter()
         listView.adapter = adapter
+
         subscribeUi(adapter)
     }
 
     private fun subscribeUi(adapter: MessageAdapter) {
-        CoroutineScope(Dispatchers.Main).launch {
-            messageRepository.getMessages().collect {
-                adapter.submitList(it)
-            }
+        lifecycleScope.launch {
+            messageRepository.getMessages().collect { adapter.submitList(it) }
         }
 
         viewModel.apply {

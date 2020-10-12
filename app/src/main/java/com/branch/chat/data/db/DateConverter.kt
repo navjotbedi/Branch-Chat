@@ -8,22 +8,30 @@ import java.util.*
 
 class DateConverter {
 
-    private val pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    private val simpleDateFormat = SimpleDateFormat(pattern, Locale.US)
+    companion object {
+        private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            .apply { timeZone = TimeZone.getTimeZone("UTC") }
+    }
 
     @TypeConverter
     @FromJson
     fun fromJson(value: String?): Date? {
-        return value?.let {
-            simpleDateFormat.parse(it)
+        return try {
+            value?.let { simpleDateFormat.parse(it) }
+        } catch (ex: Exception) {
+            null
         }
     }
 
     @TypeConverter
     @ToJson
     fun toJson(date: Date?): String? {
-        return date?.let {
-            simpleDateFormat.format(date)
+        return try {
+            date?.let {
+                simpleDateFormat.format(date)
+            }
+        } catch (ex: Exception) {
+            null
         }
     }
 

@@ -17,14 +17,25 @@ data class Message(
     @Json(name = "agent_id") val agentId: String?,
     @Json(name = "timestamp") val timestamp: Date?
 ) {
-    companion object {
-        private val simpleDateFormat = SimpleDateFormat("dd MMM, yyyy HH:mm", Locale.US)
+
+    companion object{
+        private val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.US)
+            .apply { timeZone = Calendar.getInstance().timeZone }
     }
 
     @Ignore
     @Transient
-    val dateString: String? = timestamp?.let { simpleDateFormat.format(it) }
+    val dateString: String? = getFormattedDateString()
+
     @Ignore
     @Transient
     val senderId: String? = agentId ?: userId
+
+    private fun getFormattedDateString(): String? {
+        return try {
+            timestamp?.let { simpleDateFormat.format(it) }
+        } catch (ex: Exception) {
+            null
+        }
+    }
 }

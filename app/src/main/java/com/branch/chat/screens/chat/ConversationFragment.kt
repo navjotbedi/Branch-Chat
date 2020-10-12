@@ -5,6 +5,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.branch.chat.R
@@ -54,7 +55,7 @@ class ConversationFragment : Fragment(R.layout.fragment_conversation) {
     }
 
     private fun subscribeUi(adapter: MessageAdapter) {
-        CoroutineScope(Dispatchers.Main).launch {
+        lifecycleScope.launch {
             messageRepository.getConversation(args.threadId).collect {
                 adapter.submitList(it)
             }

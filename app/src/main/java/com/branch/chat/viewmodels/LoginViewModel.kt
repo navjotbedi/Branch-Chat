@@ -9,6 +9,7 @@ import com.branch.chat.network.ApiService
 import com.branch.chat.network.STATUS
 import com.branch.chat.utils.PreferenceManager
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class LoginViewModel @ViewModelInject constructor(
     private val apiService: ApiService,

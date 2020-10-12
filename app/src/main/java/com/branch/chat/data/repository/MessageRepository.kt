@@ -1,5 +1,6 @@
 package com.branch.chat.data.repository
 
+import android.util.Log
 import com.branch.chat.data.db.Message
 import com.branch.chat.data.api.MessageRequest
 import com.branch.chat.data.db.MessageDao
